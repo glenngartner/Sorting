@@ -3,3 +3,7 @@
 //
 
 #include "MultiSorter.h"
+
+MultiSorter::MultiSorter(std::vector<int> *sourceList) {
+    this->sourceList = sourceList;
+}
