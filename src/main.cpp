@@ -1,7 +1,6 @@
 #include <iostream>
 #include <RandomListGenerator.h>
 #include <MultiSorter.h>
-#include <list>
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
