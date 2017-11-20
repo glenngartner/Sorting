@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <list>
 
 #ifndef SORTING_MULTISORTER_H
 #define SORTING_MULTISORTER_H
@@ -15,7 +16,7 @@ public:
     std::vector<int>* sourceList;
     std::vector<int> sortedList;
 
-    void insertion();
+    std::list<int> insertion();
 
 };
 

@@ -3,29 +3,43 @@
 //
 
 #include "MultiSorter.h"
+#include <list>
+#include <limits>
 
 MultiSorter::MultiSorter(std::vector<int> *sourceList) {
     this->sourceList = sourceList;
     this->sortedList = {};
 }
 
-void MultiSorter::insertion() {
-    // clear the sorted list
-    this->sortedList = {};
-    // add the first element of the source list to the sorted list
-    this->sortedList.push_back((*this->sourceList)[0]);
+std::list<int> MultiSorter::insertion() {
+    // create a new, empty list
+    std::list<int> newList(this->sourceList->size(), std::numeric_limits<int>::max());
+    std::list<int>::iterator it = newList.begin();
 
-    // for every item in the sorted list collection (skip the first one)
-    for (int i = 1; i < this->sourceList->size(); i++) {
-        // initialize the sorted list index to 0 (the beginning)
-        int sortedIndex = 0;
-
-        while (sortedIndex < this->sortedList.size()) {
-            // if the current item in the source list is less than the current item in the sorted list
-            if ((*this->sourceList)[i] <= this->sortedList[sortedIndex]){
-                // insert the source list item before the sorted list item
-//                this->sortedList.insert()
+    // iterate over each item in the list, and place it in the correct location in the new list
+    for (int i = 0; i < this->sourceList->size(); i++) {
+        int currentItem = (*this->sourceList)[i];
+        it = newList.begin();
+        // insert the first item from the source list into the new list
+        if (i == 0) {
+            *it = currentItem;
+        } else {
+            if (currentItem < *it) {
+                // add this item to the front, and shift all other items backwards
+                newList.push_front(currentItem);
+                newList.pop_back(); // remove the last item, so the list doesn't grow
+            } else {
+                while (currentItem > *it) {
+                    it++;
+                }
+                if (*it == std::numeric_limits<int>::max()) {
+                    *it = currentItem;
+                } else {
+                    newList.insert(it, currentItem);
+                    newList.pop_back();
+                }
             }
-        };
+        }
     }
+    return newList;
 }
