@@ -3,8 +3,8 @@
 //
 
 #include "MultiSorter.h"
-#include <list>
 #include <limits>
+#include <cmath>
 
 MultiSorter::MultiSorter(std::vector<int> *sourceList) {
     this->sourceList = sourceList;
@@ -54,4 +54,68 @@ std::list<int> MultiSorter::insertion() {
         }
     }
     return newList;
+}
+
+/**
+ * Builds a min-heap from an unsorted list
+ * @return
+ */
+std::vector<int> MultiSorter::heapSort() {
+    // create an empty heap vector
+    std::vector<int> heapArray(this->sourceList->size(), -1);
+    // copy the source list
+    std::vector<int> sourceCopy = *this->sourceList;
+
+    // walk through each item in the list
+    for (int i = 0; i < sourceCopy.size(); i++) {
+
+        // store the value of the current item
+        int currentItem = sourceCopy[i];
+
+        // store the value of the children
+        int leftIndex = (2 * i) + 1;
+        int righIndex = (2 * i) + 2;
+
+        // if this isn't the root node
+        if (i != 0) {
+
+            // store the value of the parent,
+            int parentIndex = std::floor((i - 1) / 2);
+            int parentValue = heapArray[parentIndex];
+
+            // if the current item is greater than it's parent
+            if (currentItem >= parentValue) {
+                // push the current item to the back of the heap array
+                heapArray[i] = currentItem;
+
+                // it's less than it's parent
+            } else {
+                // heapify this bad boy
+                int j = i;
+                int tempParentIndex = std::floor((j-1) / 2);
+                int tempParentValue = heapArray[tempParentIndex];
+                while (currentItem < tempParentValue) {
+
+                    // put the current value in it's parent's place
+                    heapArray[tempParentIndex] = currentItem;
+
+                    // place the parent in this current index position
+                    heapArray[j] = tempParentValue;
+
+                    j = tempParentIndex;
+                    tempParentIndex = std::floor((tempParentIndex - 1) / 2);
+                    tempParentValue = heapArray[tempParentIndex];
+                }
+            }
+
+            // if this is the root node
+        } else {
+            // just store the value of the root at the heap root
+            heapArray[i] = currentItem;
+        }
+
+
+    }
+
+    return heapArray;
 }

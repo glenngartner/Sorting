@@ -18,6 +18,8 @@ public:
 
     std::list<int> insertion();
 
+    std::vector<int> heapSort();
+
 };
 
 
