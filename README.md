@@ -1,12 +1,8 @@
 ## Multiple Sorting Algorithms Application 
 A console application implementing various sorting algorithms. Including: 
 * Insertion
-* Selection
-* Bubble
-* Merge
 * Quick
 * Heap
-* Bucket
 
 The application begins with a random unsorted vector of integers. It then runs through each sorting algorithm, timing each, and returning the sorted list.
 ### Dependencies
