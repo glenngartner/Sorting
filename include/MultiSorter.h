@@ -20,6 +20,8 @@ public:
 
     std::vector<int> heapSort();
 
+    std::vector<int> heapify(std::vector<int> listToHeapify);
+
 };
 
 

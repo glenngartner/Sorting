@@ -5,6 +5,8 @@
 #include "MultiSorter.h"
 #include <limits>
 #include <cmath>
+#include <limits>
+#include <algorithm>
 
 MultiSorter::MultiSorter(std::vector<int> *sourceList) {
     this->sourceList = sourceList;
@@ -63,8 +65,10 @@ std::list<int> MultiSorter::insertion() {
 std::vector<int> MultiSorter::heapSort() {
     // create an empty heap vector
     std::vector<int> heapArray(this->sourceList->size(), -1);
-    // copy the source list
+    // copy the source list (this may not be necessary, but I originally intended to edit the contents)
     std::vector<int> sourceCopy = *this->sourceList;
+    // store values for the sorted array
+    std::vector<int> heapSorted(this->sourceList->size(), -1);
 
     // walk through each item in the list
     for (int i = 0; i < sourceCopy.size(); i++) {
@@ -73,8 +77,8 @@ std::vector<int> MultiSorter::heapSort() {
         int currentItem = sourceCopy[i];
 
         // store the value of the children
-        int leftIndex = (2 * i) + 1;
-        int righIndex = (2 * i) + 2;
+//        int leftIndex = (2 * i) + 1;
+//        int righIndex = (2 * i) + 2;
 
         // if this isn't the root node
         if (i != 0) {
@@ -85,15 +89,16 @@ std::vector<int> MultiSorter::heapSort() {
 
             // if the current item is greater than it's parent
             if (currentItem >= parentValue) {
-                // push the current item to the back of the heap array
+                // add the current item to the current index in the heap array
                 heapArray[i] = currentItem;
 
                 // it's less than it's parent
             } else {
                 // heapify this bad boy
                 int j = i;
-                int tempParentIndex = std::floor((j-1) / 2);
+                int tempParentIndex = std::floor((j - 1) / 2);
                 int tempParentValue = heapArray[tempParentIndex];
+
                 while (currentItem < tempParentValue) {
 
                     // put the current value in it's parent's place
@@ -113,9 +118,102 @@ std::vector<int> MultiSorter::heapSort() {
             // just store the value of the root at the heap root
             heapArray[i] = currentItem;
         }
-
-
     }
 
-    return heapArray;
+    // now that everything is heaped, sort the array
+    for (int i = 0; i < heapSorted.size(); i++) {
+        // assign the root node of the heap to the sorted array, because it's always the smallest
+        heapSorted[i] = heapArray[0];
+        // once the root node is transferred, assign a max value to it
+        heapArray[0] = std::numeric_limits<int>::max();
+        // heapify the heap array again, since a max int value is at the top of the min heap
+        heapArray = this->heapify(heapArray);
+    }
+
+    // return the sorted heap list
+    return heapSorted;
+}
+
+/**
+ * create's a min heap, assuming the root node in the argument is wrong
+ * @param listToHeapify
+ * @return a min heap vector
+ */
+std::vector<int> MultiSorter::heapify(std::vector<int> listToHeapify) {
+
+    // create some variables
+    int i = 0;
+    bool doLoop = true;
+    int currentValue;
+
+    int leftChildIndex;
+    int rightChildIndex;
+    int leftChildValue;
+    int rightChildValue;
+
+    int min; // holds the minimum value, when the left and right child values are compared
+    bool hasChildren;
+
+    while (doLoop) {
+        // find the indices of the left and right child of the current index item
+        leftChildIndex = (2 * i) + 1;
+        rightChildIndex = (2 * i) + 2;
+
+        // if the left index value is within the vector size range
+        if (leftChildIndex < listToHeapify.size()) {
+            // assign the left child value from the heap array
+            leftChildValue = listToHeapify[leftChildIndex];
+            // if the left index value is outside of the vector size range
+        } else {
+            // assign the max int value. This prevents the occassional garbage int value being assigned with an out of range vector index is accessed
+            leftChildValue = std::numeric_limits<int>::max();
+        }
+
+        // if the right index value is within the vector size range
+        if (rightChildIndex < listToHeapify.size()) {
+            //ass teh right child value from the heap array
+            rightChildValue = listToHeapify[rightChildIndex];
+            // if the right index value is outside of the vector size range
+        } else {
+            // assign the max int value. This prevents the occassional garbage int value being assigned with an out of range vector index is accessed
+            rightChildValue = std::numeric_limits<int>::max();
+        }
+
+        // store the current int value of the heap index we're working with
+        currentValue = listToHeapify[i];
+        // compare the left and right child values of the current node. return the least of the two
+        min = std::min(leftChildValue, rightChildValue);
+
+        // if both the left and right child node indices are out of range (meaning, there are not actual children in this vector)
+        if (leftChildIndex > (listToHeapify.size() - 1) && rightChildIndex > (listToHeapify.size()) - 1) {
+            // set the hasChildren flag to false
+            hasChildren = false;
+            // if the left and right child indices are within range
+        } else {
+            // set the has children flag to true
+            hasChildren = true;
+        }
+
+        // if the current value is greater than the value of one of its children, they should be swapped
+        if (currentValue > min && hasChildren) {
+            // if the left child value is smaller
+            if (min == leftChildValue) {
+                // swap the current value
+                listToHeapify[i] = leftChildValue;
+                listToHeapify[leftChildIndex] = currentValue;
+                i = leftChildIndex;
+                // otherwise, swap the right child values
+            } else {
+                listToHeapify[i] = rightChildValue;
+                listToHeapify[rightChildIndex] = currentValue;
+                i = rightChildIndex;
+            }
+            // if the current value is less than both of it's children
+        } else {
+            // stop looping, you're done heapifying
+            doLoop = false;
+        }
+    }
+
+    return listToHeapify;
 }
