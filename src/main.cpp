@@ -23,7 +23,7 @@ int main() {
     auto timeEnd = Clock::now();
     auto deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(timeEnd - timeStart).count();
     Printer::printList("Insertion Sorted: ", insertionSortedList);
-    printf("Execution time: %i nanoseconds\n\n", deltaTime);
+    printf("Execution time: %lli nanoseconds\n\n", deltaTime);
 
     // Use heap sort, print the sorted list, and print the execution time
     timeStart = Clock::now();
@@ -31,7 +31,7 @@ int main() {
     timeEnd = Clock::now();
     deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(timeEnd - timeStart).count();
     Printer::printVector("Heap Sorted: ", heapSorted);
-    printf("Execution time: %i nanoseconds\n\n", deltaTime);
+    printf("Execution time: %lli nanoseconds\n\n", deltaTime);
 
     // Use quick sort, print the sorted list, and print the execution time
     std::vector<int> quickSortSource = *newSorter->sourceList;
@@ -41,7 +41,7 @@ int main() {
     timeEnd = Clock::now();
     deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(timeEnd - timeStart).count();
     Printer::printVector("Quick Sorted: ", quickSortSource);
-    printf("Execution time: %i nanoseconds\n\n", deltaTime);
+    printf("Execution time: %lli nanoseconds\n\n", deltaTime);
 
     return 0;
 }
