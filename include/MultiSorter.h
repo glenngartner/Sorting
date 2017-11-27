@@ -22,6 +22,10 @@ public:
 
     std::vector<int> heapify(std::vector<int> listToHeapify);
 
+    void quickSort(std::vector<int> &listToSort, int startIndex, int arraySize);
+
+    int partition(std::vector<int> &listToSort, int startIndex, int arraySize);
+
 };
 
 

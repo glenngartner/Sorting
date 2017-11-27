@@ -13,6 +13,10 @@ MultiSorter::MultiSorter(std::vector<int> *sourceList) {
     this->sortedList = {};
 }
 
+/**
+ * Performs an insertion list, usign the sourceList member property
+ * @return a list of sorted integers
+ */
 std::list<int> MultiSorter::insertion() {
     // create a new, empty list that's the same size as the source list, with max integer values for each index (as placeholders)
     std::list<int> newList(this->sourceList->size(), std::numeric_limits<int>::max());
@@ -59,8 +63,8 @@ std::list<int> MultiSorter::insertion() {
 }
 
 /**
- * Builds a min-heap from an unsorted list
- * @return
+ * Builds a min-heap from an unsorted list, then sorts that list
+ * @return A sorted list of integers
  */
 std::vector<int> MultiSorter::heapSort() {
     // create an empty heap vector
@@ -135,7 +139,7 @@ std::vector<int> MultiSorter::heapSort() {
 }
 
 /**
- * create's a min heap, assuming the root node in the argument is wrong
+ * Creates a min heap, assuming the root node in the argument is wrong
  * @param listToHeapify
  * @return a min heap vector
  */
@@ -216,4 +220,28 @@ std::vector<int> MultiSorter::heapify(std::vector<int> listToHeapify) {
     }
 
     return listToHeapify;
+}
+
+void MultiSorter::quickSort(std::vector<int> &listToSort, int startIndex, int arraySize) {
+    int index;
+    if (startIndex < arraySize) {
+        index = this->partition(listToSort, startIndex, arraySize);
+        this->quickSort(listToSort, startIndex, index);
+        this->quickSort(listToSort, index + 1, arraySize);
+    }
+}
+
+int MultiSorter::partition(std::vector<int> &listToSort, int startIndex, int arraySize) {
+    int pivotValue = listToSort[startIndex];
+    int index = startIndex;
+    int iterator;
+
+    for (iterator = startIndex + 1; iterator < arraySize; iterator++) {
+        if (listToSort[iterator] <= pivotValue) {
+            index = index + 1;
+            std::swap(listToSort[index], listToSort[iterator]);
+        }
+    }
+    std::swap(listToSort[index], listToSort[startIndex]);
+    return index;
 }

@@ -5,5 +5,5 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-set(SOURCE_FILES src/main.cpp src/RandomListGenerator.cpp include/RandomListGenerator.h src/MultiSorter.cpp include/MultiSorter.h)
+set(SOURCE_FILES src/main.cpp src/RandomListGenerator.cpp include/RandomListGenerator.h src/MultiSorter.cpp include/MultiSorter.h src/Printer.cpp include/Printer.h)
 add_executable(sorting ${SOURCE_FILES})
